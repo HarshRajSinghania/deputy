@@ -69,6 +69,9 @@ def _startup_mode() -> str:
 
 
 mcp = FastMCP("deputy", instructions=build_instructions(_startup_mode()), log_level="WARNING")
+# The MCP handshake must report Deputy's version, not the SDK's. FastMCP does not
+# expose a version argument, so set it on the underlying low-level server.
+mcp._mcp_server.version = __version__
 
 _code_lock = threading.Lock()
 _session_lock = threading.Lock()

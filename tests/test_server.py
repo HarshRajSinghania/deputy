@@ -80,3 +80,14 @@ def test_file_uris_become_paths():
     else:
         assert server._uri_to_path("file:///home/me/my%20app") == Path("/home/me/my app")
     assert server._uri_to_path("https://example.com") is None
+
+
+def test_initialize_reports_deputy_version():
+    """The MCP initialize response must report Deputy's version, not the SDK's."""
+    from deputy import __version__
+
+    options = server.mcp._mcp_server.create_initialization_options()
+    assert options.server_name == "deputy"
+    assert options.server_version == __version__
+    # The value that initialize returns as serverInfo.version comes from here.
+    assert server.mcp._mcp_server.version == __version__
